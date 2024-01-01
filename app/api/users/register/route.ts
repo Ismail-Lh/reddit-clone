@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import bcrypt from 'bcryptjs';
 
 import prisma from '@/lib/prisma';
+import getMessageError from '@/actions/getMessageError';
 import isUsernameExist from '@/actions/isUsernameExist';
 
 export async function POST(req: Request) {
@@ -12,10 +13,9 @@ export async function POST(req: Request) {
     const isUserExist = await isUsernameExist(username);
 
     if (isUserExist)
-      return NextResponse.json({
-        success: false,
-        error: 'Provided username already exist. Please try another one.',
-      });
+      throw new Error(
+        'Provided username already exist. Please try another one.'
+      );
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -27,7 +27,7 @@ export async function POST(req: Request) {
     delete user.password;
 
     return NextResponse.json({ success: true, user });
-  } catch (error: any) {
-    return NextResponse.json({ success: false, error: error.message });
+  } catch (error: unknown) {
+    return NextResponse.json({ success: false, error: getMessageError(error) });
   }
 }

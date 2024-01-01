@@ -2,13 +2,17 @@
 
 import React, { useState } from 'react';
 
+import getMessageError from '@/actions/getMessageError';
+
 function RegisterPage() {
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    setIsSubmitting(true);
     try {
       const res = await fetch('/api/users/register', {
         method: 'POST',
@@ -17,10 +21,14 @@ function RegisterPage() {
       });
       const data = await res.json();
 
-      if (!data.success && data.error) console.log(data.error);
+      if (!data.success && data.error) throw new Error(data.error);
       else console.log(data.user);
-    } catch (error: any) {
-      console.error(error.message);
+
+      setIsSubmitting(false);
+    } catch (error: unknown) {
+      const errorMessage = getMessageError(error);
+      console.log(errorMessage);
+      setIsSubmitting(false);
     }
   };
 
@@ -52,7 +60,8 @@ function RegisterPage() {
         />
         <button
           type="submit"
-          className="rounded-full bg-[#D93A00] px-4 py-2 text-white"
+          disabled={isSubmitting}
+          className="rounded-full bg-[#D93A00] px-4 py-2 text-white disabled:cursor-not-allowed disabled:bg-[#fdc3ae]"
         >
           Register
         </button>
