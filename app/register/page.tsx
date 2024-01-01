@@ -1,12 +1,15 @@
 'use client';
 
 import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 import getMessageError from '@/actions/getMessageError';
 
 function RegisterPage() {
+  const router = useRouter();
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
+  const [error, setError] = useState<string>('');
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -22,18 +25,22 @@ function RegisterPage() {
       const data = await res.json();
 
       if (!data.success && data.error) throw new Error(data.error);
-      else console.log(data.user);
 
+      setError('');
+      setUsername('');
+      setPassword('');
+      router.refresh();
       setIsSubmitting(false);
-    } catch (error: unknown) {
-      const errorMessage = getMessageError(error);
-      console.log(errorMessage);
+    } catch (err: unknown) {
+      const errorMessage = getMessageError(err);
+      setError(errorMessage);
       setIsSubmitting(false);
     }
   };
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
+    <main className="flex flex-col items-center justify-between p-24">
+      {error && <p className="mb-4 text-red-500">{error}</p>}
       <form
         className="flex w-1/2 flex-col gap-y-4"
         onSubmit={(e) => handleRegister(e)}

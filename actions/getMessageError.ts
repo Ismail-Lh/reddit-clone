@@ -7,7 +7,7 @@ const getMessageError = (error: unknown) => {
   else if (typeof error === 'string') message = error;
   else message = 'Something went wrong.';
 
-  return message;
+  return message as string;
 };
 
 export default getMessageError;
