@@ -1,6 +1,6 @@
 import prisma from '@/lib/prisma';
 
-async function isUsernameExist(username: string) {
+async function isUsernameExist(username: string): Promise<boolean> {
   const isUserExist = await prisma.user.findUnique({
     where: {
       username,
