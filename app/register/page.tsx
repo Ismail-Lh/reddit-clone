@@ -29,8 +29,9 @@ function RegisterPage() {
       setError('');
       setUsername('');
       setPassword('');
-      router.refresh();
       setIsSubmitting(false);
+      router.refresh();
+      router.push('/');
     } catch (err: unknown) {
       const errorMessage = getMessageError(err);
       setError(errorMessage);

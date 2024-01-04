@@ -15,7 +15,7 @@ async function Navbar() {
         <li className="rounded-full bg-[#D93A00] px-4 py-2 text-white">
           <Link href="/subreddits">Subreddits</Link>
         </li>
-        {!user?.id && (
+        {!user && (
           <>
             <li className="rounded-full bg-[#D93A00] px-4 py-2 text-white">
               <Link href="/login">Login</Link>
@@ -27,7 +27,7 @@ async function Navbar() {
         )}
         {user?.id && (
           <li className="rounded-full bg-[#D93A00] px-4 py-2 text-white">
-            <Link href="/login">Logout</Link>
+            <Link href="/logout">Logout</Link>
           </li>
         )}
       </ul>
