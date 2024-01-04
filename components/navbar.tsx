@@ -1,7 +1,7 @@
 import React from 'react';
-import Link from 'next/link';
 
 import fetchUser from '@/actions/fetchUser';
+import NavLink from './navlink';
 
 async function Navbar() {
   const user = await fetchUser();
@@ -10,24 +10,23 @@ async function Navbar() {
     <nav className="px-24 pt-6 ">
       <ul className="flex items-center justify-evenly gap-3  py-2">
         <li className="rounded-full bg-[#D93A00] px-4 py-2 text-white">
-          <Link href="/">Home</Link>
+          <NavLink href="/" link="home" />
         </li>
         <li className="rounded-full bg-[#D93A00] px-4 py-2 text-white">
-          <Link href="/subreddits">Subreddits</Link>
+          <NavLink href="subreddits" link="subreddits" />
         </li>
-        {!user && (
+        {!user?.id ? (
           <>
             <li className="rounded-full bg-[#D93A00] px-4 py-2 text-white">
-              <Link href="/login">Login</Link>
+              <NavLink href="/login" link="login" />
             </li>
             <li className="rounded-full bg-[#D93A00] px-4 py-2 text-white">
-              <Link href="/register">Register</Link>
+              <NavLink href="/register" link="register" />
             </li>
           </>
-        )}
-        {user?.id && (
+        ) : (
           <li className="rounded-full bg-[#D93A00] px-4 py-2 text-white">
-            <Link href="/logout">Logout</Link>
+            <NavLink href="/" link="logout" handleClick />
           </li>
         )}
       </ul>
